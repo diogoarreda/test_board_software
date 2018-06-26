@@ -12,7 +12,7 @@ IMU_ADDRESS = 0x68
 TEMP_ADDRESS = 0x48
 IMU_WHO_I_AM = 0x75 				#default value of the register for MP-92/65: 0x73
 
-led_gpio_list = [21,22,23,24] 		#Led Green: 21 -> 22 | Led Red: 23 -> 24
+led_gpio_list = [21,22,23,24] 		#Led Green: 21 -> 22 | Led Red: 23 -> 24 , Requires 220Ω to 1kΩ Resistor with the Leds
 GPIO.setup(led_gpio_list, GPIO.OUT)
 
 
@@ -31,16 +31,47 @@ def run_command(command):
 command_mount = "sudo mount /dev/sda1 /home/pi/tests/usb"
 run_command(command_mount)
 
+				# ---------------- TO BE CHECK ------------------#
+command_mount = "sudo mount /dev/sda2 /home/pi/tests/usb"
+run_command(command_mount)
+
+command_mount = "sudo mount /dev/sda3 /home/pi/tests/usb"
+run_command(command_mount)
+				# ---------------- TO BE CHECK ------------------#
+
 try:
-	file1 = open("/home/pi/tests/usb/read_this.txt.txt", "r") 
+	file1 = open("/home/pi/tests/usb/usb1.txt", "r") #File inside Pen 1 should be named "usb1.txt" 
 
 except IOError:
 	test_usb1 = False; 		#print "Could not open file"
 with file1:
-	print file.read()
+	print file1.read()
 	test_usb1 = True;		#print "success opening the file on the usb flash"
 
+				
+				# ---------------- TO BE CHECK ------------------#
+try:
+	file2 = open("/home/pi/tests/usb/usb2.txt", "r") #File inside Pen 2 should be named "usb2.txt" 
+
+except IOError:
+	test_usb2 = False; 		#print "Could not open file"
+with file2:
+	print file2.read()
+	test_usb2 = True;		#print "success opening the file on the usb flash"
+
+try:
+	file3 = open("/home/pi/tests/usb/usb3.txt", "r") #File inside Pen 3 should be named "usb3.txt" 
+
+except IOError:
+	test_usb3 = False; 		#print "Could not open file"
+with file3:
+	print file3.read()
+	test_usb3 = True;		#print "success opening the file on the usb flash"
+				# -------------- TO BE CHECK ------------------#
+
 file1.close()
+file2.close()
+file3.close()
 
 #---------------- UART Communication Test ------------------------#
 
@@ -84,7 +115,7 @@ else:
 
 if (
 	test_imu == True and test_uart == True and 
-	test_usb1 == True
+	test_usb1 == True and test_usb2 == True and test_usb3 == True
 	):
 
 	#LED Green ON
